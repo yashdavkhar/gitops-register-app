@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: register-app
-          image: yash407/register-app-pipeline:${IMAGE_TAG}
+          image: yash407/register-app-pipeline:
           resources:
             limits:
               memory: "256Mi"
