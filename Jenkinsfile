@@ -1,7 +1,8 @@
 pipeline {
     agent { label "Jenkins-Agent" }
     environment {
-              APP_NAME = "register-app-pipeline"
+        APP_NAME = "register-app-pipeline"
+        IMAGE_TAG = "v1.0.0" // Dynamically pass the tag if needed
     }
 
     stages {
@@ -12,16 +13,15 @@ pipeline {
         }
 
         stage("Checkout from SCM") {
-               steps {
-                   git branch: 'main', credentialsId: 'github', url: 'https://github.com/yashdavkhar/gitops-register-app'
-               }
+            steps {
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/yashdavkhar/gitops-register-app'
+            }
         }
 
         stage("Update the Deployment Tags") {
             steps {
                 sh """
-                   cat deployment.yaml
-                   sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' deployment.yaml
+                   sed -i "s|image: ${APP_NAME}:.*|image: ${APP_NAME}:${IMAGE_TAG}|g" deployment.yaml
                    cat deployment.yaml
                 """
             }
@@ -40,6 +40,5 @@ pipeline {
                 }
             }
         }
-      
     }
 }
