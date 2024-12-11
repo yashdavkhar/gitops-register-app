@@ -34,13 +34,15 @@ pipeline {
 
         stage("Push the changed deployment file to Git") {
             steps {
-                sh """
-                   git config --global user.name "yashdavkhar"
-                   git config --global user.email "ashfaque.s510@gmail.com"
-                   git add deployment.yaml
-                   git commit -m "Updated Deployment Manifest" || echo "No changes to commit"
-                   git push https://github.com/yashdavkhar/gitops-register-app
-                """
+                withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    sh """
+                       git config --global user.name "yashdavkhar"
+                       git config --global user.email "yashdavkhar@gmail.com"
+                       git add deployment.yaml
+                       git commit -m "Updated Deployment Manifest" || echo "No changes to commit"
+                       git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/yashdavkhar/gitops-register-app
+                    """
+                }
             }
         }
     }
