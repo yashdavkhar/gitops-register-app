@@ -1,8 +1,13 @@
 pipeline {
     agent { label "Jenkins-Agent" }
+
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: 'v1.0.0', description: 'Image Tag')
+    }
+
     environment {
         APP_NAME = "register-app-pipeline"
-        IMAGE_TAG = "v1.0.0" // Replace with your dynamic tag logic
+        IMAGE_TAG = "${params.IMAGE_TAG}" // Dynamically use the parameter
     }
 
     stages {
